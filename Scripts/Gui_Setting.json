@@ -1,0 +1,23 @@
+{
+    "gui-object":
+    {
+        "text001":{
+            "size":60,
+            "pos":{"x":100,"y":690}
+        },
+        "button001":{
+            "size":60,
+            "pos":{"x":100,"y":790}
+        }
+    },
+    "eirin":{
+        "image-dir":"Scripts/Eirin.png",
+        "speak":
+        {
+            "size":80,
+            "pos_x":100,
+            "color":{"back":"pink","docs":"red"}
+        }
+    },
+    "alias":{}
+}
