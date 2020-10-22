@@ -4,19 +4,23 @@ import json
 import os
 
 class TkObject():
-    def __init__(self,econf,y,result):
-        self.img = tkinter.PhotoImage(file=str(econf["image-dir"])).subsample(4, 4)
-        canvas = tkinter.Canvas(width=500, height=500)
-        canvas.place(x=0, y=0)
-        canvas.create_image(20, 60, image=self.img, anchor=tkinter.NW)
-        color=econf["speak"]["color"]
-        self.txt = tkinter.Label(StartUp.Get().root,text=result,background=str(color["back"]),foreground=str(color["docs"]))
-        self.txt.place(x=int(econf["speak"]["pos_x"]), y=y)
+
+    def __init__(self,conf,y,result):
+        image = conf["image"]
+        self.img = tkinter.PhotoImage(file=str(image["dir"])).subsample(4, 4)
+        canvas = StartUp.Get().gui.canvas
+        canvas.create_image(image["pos"]["x"], image["pos"]["y"], image=self.img, anchor=tkinter.NW)
+        color=conf["speak"]["color"]
+        self.txt = tkinter.Label(StartUp.Get().root,text=result,background=str(color["back"]),foreground=str(color["docs"]),justify=conf["speak"]["justify"])
+        self.txt.place(x=int(conf["speak"]["pos_x"]), y=y)
 
 class GuiWindow():
     def __init__(self):
         with open("./Scripts/Gui_Setting.json", "r",encoding="utf-8") as f:
             self.conf = json.load(f)
+        canvas = self.conf["gui-object"]["canvas001"]
+        self.canvas = tkinter.Canvas(width=int(canvas["size"]["x"]), height=int(canvas["size"]["y"]))
+        self.canvas.place(x=0, y=0)
         pass
 
     def StartObject(self):
@@ -25,18 +29,22 @@ class GuiWindow():
         pos = self.conf["gui-object"]["text001"]["pos"]
         self.txt.place(x=int(pos["x"]), y=int(pos["y"]))
 
-    def AppendLine(self,result):
-        obj = TkObject(self.conf["eirin"],100,result)
+    def EirinAppendLine(self,result):
+        obj = TkObject(self.conf["eirin"],150,result)
+        self.obj.append(obj)
+
+    def YourAppendLine(self,cout):
+        obj = TkObject(self.conf["you"],100,cout)
         self.obj.append(obj)
 
     def CallBack(self,event):
         try:
             txt = str(self.txt.get())
-            print(txt)
+            self.YourAppendLine(txt)
             result = subprocess.check_output(txt.split(),stderr=subprocess.STDOUT,shell=True)
-            self.AppendLine(result)
-        except Exception:
-            self.AppendLine("Error")
+            self.EirinAppendLine(result)
+        except Exception as e:
+            self.EirinAppendLine(str(e))
             return
 
 class Window():

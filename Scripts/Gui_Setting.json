@@ -1,22 +1,48 @@
 {
     "gui-object":
     {
-        "text001":{
+        "text001":
+        {
             "size":60,
             "pos":{"x":100,"y":690}
         },
-        "button001":{
+        "canvas001":
+        {
+            "size":{"x":700,"y":500}
+        },
+        "button001":
+        {
             "size":60,
             "pos":{"x":100,"y":790}
         }
     },
-    "eirin":{
-        "image-dir":"Scripts/Eirin.png",
+    "eirin":
+    {
+        "image":
+        {
+            "dir":"Scripts/Eirin.png",
+            "pos":{"x":20,"y":60}
+        },
         "speak":
         {
             "size":80,
             "pos_x":100,
+            "justify":"right",
             "color":{"back":"pink","docs":"red"}
+        }
+    },
+    "you":{
+        "image":
+        {
+            "dir":"Scripts/You.png",
+            "pos":{"x":600,"y":60}
+        },
+        "speak":
+        {
+            "size":80,
+            "pos_x":500,
+            "justify":"left",
+            "color":{"back":"yellow","docs":"green"}
         }
     },
     "alias":{}
