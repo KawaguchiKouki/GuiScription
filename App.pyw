@@ -7,21 +7,41 @@ class TkObject():
 
     def __init__(self,conf,y,result):
         image = conf["image"]
-        self.img = tkinter.PhotoImage(file=str(image["dir"])).subsample(4, 4)
+        img = tkinter.PhotoImage(file=str(image["dir"]))
+        self.img = img.subsample(4, 4)
         canvas = StartUp.Get().gui.canvas
-        canvas.create_image(image["pos"]["x"], image["pos"]["y"], image=self.img, anchor=tkinter.NW)
+        self.pos = {'x':image["pos"]["x"],'y':image["pos"]["y"]}
+        self.cimg = canvas.create_image(self.pos['x'], self.pos['y'], image=self.img, anchor=tkinter.NW)
         color=conf["speak"]["color"]
-        self.txt = tkinter.Label(StartUp.Get().root,text=result,background=str(color["back"]),foreground=str(color["docs"]),justify=conf["speak"]["justify"])
+        self.txt = tkinter.Label(StartUp.Get().root,text=result,background=str(color["back"]),foreground=str(color["docs"]),justify=str(conf["speak"]["justify"]))
         self.txt.place(x=int(conf["speak"]["pos_x"]), y=y)
 
 class GuiWindow():
     def __init__(self):
         with open("./Scripts/Gui_Setting.json", "r",encoding="utf-8") as f:
             self.conf = json.load(f)
+        self.FrameInit()
         canvas = self.conf["gui-object"]["canvas001"]
-        self.canvas = tkinter.Canvas(width=int(canvas["size"]["x"]), height=int(canvas["size"]["y"]))
+        self.canvas = tkinter.Canvas(width=int(StartUp.Get().conf["size"]["x"]), height=int(self.conf["gui-object"]["main"]["pos_y"]),bg=str(self.conf["gui-object"]["canvas001"]["color"]))
         self.canvas.place(x=0, y=0)
-        pass
+        self.canvas["yscrollcommand"]=self.scrollbar.set
+        self.size_of = 100
+
+    def FrameInit(self):
+        self.frame = []
+        conf = StartUp.Get().conf
+        main = tkinter.Frame(StartUp.Get().root, width=int(conf["size"]["x"]),height=int(conf["size"]["y"]),bg=str(self.conf["gui-object"]["main"]["color"]))
+        main.place(x=0,y=0)
+        ufrm = tkinter.Frame(main,width=int(conf["size"]["x"]),height=int(self.conf["gui-object"]["main"]["pos_y"]))
+        ufrm.place(x=0,y=0)
+        __size = (int(conf["size"]["x"]),int(conf["size"]["y"])-int(self.conf["gui-object"]["main"]["pos_y"]))
+        dfrm = tkinter.Frame(main,width=__size[0],height=__size[1],bg=str(self.conf["gui-object"]["sub002"]["color"]))
+        dfrm.place(x=0,y=int(self.conf["gui-object"]["main"]["pos_y"]))
+        self.scrollbar = tkinter.Scrollbar(ufrm)
+        self.scrollbar.pack(side=tkinter.RIGHT, fill="y")
+        self.frame.append(main)
+        self.frame.append(ufrm)
+        self.frame.append(dfrm)
 
     def StartObject(self):
         self.obj=list()
@@ -30,11 +50,14 @@ class GuiWindow():
         self.txt.place(x=int(pos["x"]), y=int(pos["y"]))
 
     def EirinAppendLine(self,result):
-        obj = TkObject(self.conf["eirin"],150,result)
+        obj = TkObject(self.conf["eirin"],self.size_of,result)
         self.obj.append(obj)
+        for o in self.obj:
+            print(o.img)
+            print(o.pos)
 
     def YourAppendLine(self,cout):
-        obj = TkObject(self.conf["you"],100,cout)
+        obj = TkObject(self.conf["you"],self.size_of,cout)
         self.obj.append(obj)
 
     def CallBack(self,event):
@@ -45,7 +68,6 @@ class GuiWindow():
             self.EirinAppendLine(result)
         except Exception as e:
             self.EirinAppendLine(str(e))
-            return
 
 class Window():
     def Config(self):
@@ -53,13 +75,13 @@ class Window():
             self.conf = json.load(f)
 
     def Loop(self):
+        self.Config()
         self.root = tkinter.Tk()
         self.gui = GuiWindow()
         self.gui.StartObject()
-        self.Config()
         subprocess.Popen(self.conf["shell"])
         self.root.title(self.conf["title"])
-        self.root.geometry(str(self.conf["size"]["x"])+"x"+str(self.conf["size"]["y"]))
+        self.root.geometry(f"{self.conf['size']['x']}x{str(self.conf['size']['y'])}")
         self.root.bind('<Return>', self.gui.CallBack)
         self.root.mainloop()
 
