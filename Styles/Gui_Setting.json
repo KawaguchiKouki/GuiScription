@@ -28,7 +28,7 @@
     {
         "image":
         {
-            "dir":"./Scripts/Eirin.png",
+            "dir":"./Styles/Eirin.png",
             "pos":{"x":20,"y":60}
         },
         "speak":
@@ -42,7 +42,7 @@
     "you":{
         "image":
         {
-            "dir":"./Scripts/You.png",
+            "dir":"./Styles/You.png",
             "pos":{"x":600,"y":60}
         },
         "speak":

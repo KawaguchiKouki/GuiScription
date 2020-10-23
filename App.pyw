@@ -18,7 +18,7 @@ class TkObject():
 
 class GuiWindow():
     def __init__(self):
-        with open("./Scripts/Gui_Setting.json", "r",encoding="utf-8") as f:
+        with open("./Styles/Gui_Setting.json", "r",encoding="utf-8") as f:
             self.conf = json.load(f)
         self.FrameInit()
         canvas = self.conf["gui-object"]["canvas001"]
@@ -71,7 +71,7 @@ class GuiWindow():
 
 class Window():
     def Config(self):
-        with open("./Scripts/Setting.json", "r",encoding="utf-8") as f:
+        with open("./Styles/Setting.json", "r",encoding="utf-8") as f:
             self.conf = json.load(f)
 
     def Loop(self):
