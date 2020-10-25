@@ -17,12 +17,13 @@ class TkObject():
         self.txt.place(x=int(conf["speak"]["pos_x"]), y=y)
 
 class GuiWindow():
+    
     def __init__(self):
         with open("./Styles/Gui_Setting.json", "r",encoding="utf-8") as f:
             self.conf = json.load(f)
         self.FrameInit()
         canvas = self.conf["gui-object"]["canvas001"]
-        self.canvas = tkinter.Canvas(width=int(StartUp.Get().conf["size"]["x"]), height=int(self.conf["gui-object"]["main"]["pos_y"]),bg=str(self.conf["gui-object"]["canvas001"]["color"]))
+        self.canvas = tkinter.Canvas(self.frame[0],width=int(StartUp.Get().conf["size"]["x"]), height=int(self.conf["gui-object"]["main"]["pos_y"]),bg=str(self.conf["gui-object"]["canvas001"]["color"]))
         self.canvas.place(x=0, y=0)
         self.canvas["yscrollcommand"]=self.scrollbar.set
         self.size_of = 100
@@ -71,6 +72,7 @@ class GuiWindow():
 
 class Window():
     def Config(self):
+        self.filedir = __file__
         with open("./Styles/Setting.json", "r",encoding="utf-8") as f:
             self.conf = json.load(f)
 
@@ -87,7 +89,7 @@ class Window():
 
 class StartUp():
     __this = None
-    def __init__(__self):
+    def __init__(self):
         pass
 
     @classmethod
